@@ -4,24 +4,15 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Boolean
 import random
 
-'''
-Install the required packages first: 
-Open the Terminal in PyCharm (bottom left). 
-
-On Windows type:
-python -m pip install -r requirements.txt
-
-On MacOS type:
-pip3 install -r requirements.txt
-
-This will install the packages from requirements.txt for this project.
-'''
 
 app = Flask(__name__)
+
 
 # CREATE DB
 class Base(DeclarativeBase):
     pass
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
@@ -80,6 +71,7 @@ def get_cafe_at_location():
     else:
         return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."}), 404
 
+
 # Test this inside Postman. Request type: Post ->  Body ->  x-www-form-urlencoded
 @app.route("/add", methods=["POST"])
 def post_new_cafe():
@@ -99,6 +91,7 @@ def post_new_cafe():
     db.session.commit()
     return jsonify(response={"success": "Successfully added the new cafe."})
 
+
 # Updating the price of a cafe based on a particular id:
 # http://127.0.0.1:5000/update-price/CAFE_ID?new_price=£5.67
 @app.route("/update-price/<int:cafe_id>", methods=["PATCH"])
@@ -111,6 +104,7 @@ def patch_new_price(cafe_id):
         return jsonify(response={"success": "Successfully updated the price."}), 200
     else:
         return jsonify(error={"Not Found": "Sorry a cafe with that id was not found in the database."}), 404
+
 
 # Deletes a cafe with a particular id. Change the request type to "Delete" in Postman
 @app.route("/report-closed/<int:cafe_id>", methods=["DELETE"])
